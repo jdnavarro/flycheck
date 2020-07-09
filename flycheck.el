@@ -9527,7 +9527,7 @@ See URL `https://www.haskell.org/ghc/'."
   :next-checkers ((warning . haskell-hlint))
   :working-directory flycheck-haskell--ghc-find-default-directory)
 
-(flycheck-def-config-file-var flycheck-hlintrc haskell-hlint "HLint.hs")
+(flycheck-def-config-file-var flycheck-hlintrc haskell-hlint ".hlint.yaml")
 
 (flycheck-def-args-var flycheck-hlint-args haskell-hlint
   :package-version '(flycheck . "0.25"))
@@ -9569,6 +9569,7 @@ string is a default hint package (e.g. (\"Generalise\"
 
 See URL `https://github.com/ndmitchell/hlint'."
   :command ("hlint"
+            "--no-exit-code"
             (option-list "-X" flycheck-hlint-language-extensions concat)
             (option-list "-i=" flycheck-hlint-ignore-rules concat)
             (option-list "-h" flycheck-hlint-hint-packages concat)
@@ -9577,17 +9578,17 @@ See URL `https://github.com/ndmitchell/hlint'."
             source-inplace)
   :error-patterns
   ((info line-start
-         (file-name) ":" line ":" column (optional "-" end-column)
+         (file-name) ":" line ":" column "-" end-column
          ": Suggestion: "
          (message (one-or-more (and (one-or-more (not (any ?\n))) ?\n)))
          line-end)
    (warning line-start
-            (file-name) ":" line ":" column (optional "-" end-column)
+            (file-name) ":" line ":" column "-" end-column
             ": Warning: "
             (message (one-or-more (and (one-or-more (not (any ?\n))) ?\n)))
             line-end)
    (error line-start
-          (file-name) ":" line ":" column (optional "-" end-column)
+          (file-name) ":" line ":" column "-" end-column
           ": Error: "
           (message (one-or-more (and (one-or-more (not (any ?\n))) ?\n)))
           line-end))
